@@ -1,0 +1,255 @@
+//OBJETOS MAP Y WEAKMAP
+
+const objetoMap = new Map();
+    objetoMap.set('Un ustring', 'un valor asociado a un string');
+    const miObjeto = {};
+    objetoMap.set(miObjeto, 'valor asociado a un objeto');
+    objetoMap.set(12, 'valor asociado a un numero');
+
+    for ([key, value] of objetoMap) {
+        console.log();
+    } //El objeto map acepta todo tipo de key y tiene una referencia fuerte
+
+const objetoWarkMap = new weakMap();
+objetoWarkMap.set('Un String', 'valos asociado a un string');
+objetoWarkMap.set({}, 'valos asociado a un obejto');
+//El objeto weakMap soloa cepta objetos como key y tiene un referencia debil
+
+
+//COMPARACION ENTRE MAP Y OBJECT
+
+const objetoMap = new Map();
+        objetoMap.set('Un ustring', 'un valor asociado a un string');
+        const miObjeto = {};
+        objetoMap.set(miObjeto, 'valor asociado a un objeto');
+        objetoMap.set(12, 'valor asociado a un numero');
+
+        for ([key, value] of objetoMap) {
+            console.log(value);
+        } //En los objetos map puedes usar cualquier dato como key
+
+        const obj = {};
+        obj['valor key1'] = 12;
+        obj['valor key2'] = 56;
+        obj['valor key3'] = 78;
+
+        /*for ([key, value] of obj) {
+            console.log(value);
+        } //En los objetos obj solo puedes usar string como key y no son iterables
+        */
+
+        const keys = Object.keys(obj);
+        keys.forEach(key => {
+            console.log(obj[key]);
+        });
+
+//SET Y WEAKSET
+
+const objetoSet = new Set( //El objetivo de la funcion set es asegurar que todos los valores son unicos
+            [1,
+                'string', {}, {
+                    nombre: 'natalia'
+                }
+            ]
+        );
+
+        objetoSet.add(12);
+        objetoSet.add(12);
+
+        console.log('Recorriendo el objeto set');
+        //Recorriendo con forEach
+        objetoSet.forEach(value => {
+            console.log(value);
+        });
+
+        //Recorriendo con for of
+        for (value of objetoSet) {
+            console.log(value);
+        };
+
+        console.log(objetoSet.has(12));
+        console.log(objetoSet.size);
+
+        console.log('Objetos weakSet');
+
+        const objetoweakSet = new WeakSet([{}, {
+            nombre: 'natalia'
+        }]);
+
+        objetoweakSet.add(12);//Solo acepba key tipo objeto
+
+        for (value of objetoweakSet) { //No son iterables
+            console.log(value);
+        };
+
+//COMPARANDO SET CON ARREGLOS 
+
+const objetoSet = new Set( //El objetivo de la funcion set es asegurar que todos los valores son unicos
+            [1,
+                'string', {}, {
+                    nombre: 'natalia'
+                }
+            ]
+        );
+
+        objetoSet.add(12);
+        objetoSet.add(12);
+
+        console.log('Recorriendo el objeto set');
+        //Recorriendo con forEach
+        objetoSet.forEach(value => {
+            console.log(value);
+        });
+
+        //Recorriendo con for of
+        for (value of objetoSet) {
+            console.log(value);
+        };
+
+        const arr = new Array(1, 2, 3, 4, 5, 6, {});//Nos permite tener elementos repetidos y accedes a ellos por un indice
+        arr[0];
+        arr.push(39);
+        arr.push(40);
+        console.log('Recorriendo el objeto array');
+        for (value of arr) {
+            console.log(value);
+        };
+
+        arr.pop();
+        arr.shift();
+
+        //Ambos son iterables 
+
+//RECORRIENDO OBJETOS CON ITERADORES
+
+ /* const arr = new Array(1, 2, 3, 4, 5, 6, 7);
+
+                                                        for (let val of arr) {
+                                                            console.log(val);
+                                                        };
+
+                                                        const iterable = arr[Symbol.iterator](); //Esta funcion permite recorrer el arreglo uno por uno
+                                                        */
+
+        /* let libros = {
+             categorias: {
+                 drama: ['LD1', 'LD2', 'LD3'],
+                 ficcion: ['LF1', 'LF2', 'LF3']
+             }
+         }
+
+         for (val of libros) {
+             console.log(val);
+         } //No es iterable de esta forma
+         */
+
+        let libros = {
+            categorias: {
+                drama: ['LD1', 'LD2', 'LD3'],
+                ficcion: ['LF1', 'LF2', 'LF3']
+            },
+            [Symbol.iterator]() {
+                let categoriasLibros = Object.values(this.categorias);
+                let iD = 0;
+                let iF = 0;
+                return {
+                    next() {
+                        if (iD >= categoriasLibros[iF].length) {
+                            iF++;
+                            iD = 0;
+                        }
+                        if (iF >= categoriasLibros.length) {
+                            return {
+                                value: undefined,
+                                done: true
+                            };
+                        }
+                        return {
+                            value: categoriasLibros[iF][iD++],
+                            done: false
+                        };
+                    }
+                };
+            }
+        };
+
+        for (let libro of libros) {
+            console.log(libro);
+        }//Todo lo anterior es un iterador que nos permite recorrer el objeto libros
+
+//OBJETOS GENERATOR
+
+function funcionNormal() {
+            for (var i = 0; i < 5; i++) {
+                console.log(i);
+                return; //Este valor detiene la ejecucion de la funcion
+            }
+        };
+        funcionNormal();
+
+        function* generarSaludo() {
+            yield 'Hola'
+            yield '¿Cómo estas?'
+            yield 'Un gusto conocerte'
+        }
+
+        let saludo = generarSaludo();
+        console.log(saludo.next().value);
+        console.log(saludo.next().value);
+        console.log(saludo.next().value);
+        console.log(saludo.next());
+
+        function* generador(iteraciones) {
+            while (iteraciones >= 0) {
+                yield iteraciones--;
+            }
+        }
+
+        let iterador = generador(3);
+
+        console.log(iterador.next());
+        console.log(iterador.next());
+        console.log(iterador.next());
+        console.log(iterador.next());
+        console.log(iterador.next());
+
+        for (const val of generador(5)) {
+            console.log(val);
+        }
+
+//DESESTRUCTURACION DE OBJETOS
+
+var libro = {
+            titulo: 'Titulo',
+            autor: 'autor',
+            genero: 'genero',
+            paginas: 1111
+        };
+
+        var {
+            titulo: prop1,
+            autor: prop2,
+            genero: prop3,
+            paginas: prop4
+        } = libro;
+
+        console.log(prop1, '\n', prop2, '\n', prop3, '\n', prop4);
+
+        //Desestructuracion en objetos anidados
+
+        let libros = {
+            categorias: {
+                drama: ['LD1', 'LD2', 'LD3'],
+                ficcion: ['LF1', 'LF2', 'LF3']
+            }
+        }
+
+        var {
+            categorias: {
+                drama: a,
+                ficcion: b
+            }
+        } = libros;
+
+        console.log(a, b);
+
