@@ -1,0 +1,149 @@
+//PROMESAS
+
+Con las promesas puedesmandar a llamar varios sitios y tu programa no se ejecutara hasta que todas se hayan cumplido
+
+const promesa = new Promise((resolve, reject) => {
+            let allOk = true;
+            if (allOk) {
+                resolve('Todo salio bien');
+            } else {
+                reject(new Error('Hubo algun error'));
+            }
+        });
+
+        promesa.then(valor => {
+            console.log(valor);
+        }, error => {
+            console.log(error);
+        });
+
+////////////////////////////////////////////////////////////
+
+const promesa = new Promise((resolve, reject) => {
+            setTimeout(resolve, 1500, 5);
+        });
+
+        promesa.then(primerValor => {
+            console.log('El primer valor es: ', primerValor);
+            return primerValor * primerValor;
+        }).then(segundoValor => {
+            console.log('El segundo valor es: ', segundoValor);
+            return segundoValor * segundoValor;
+        }).then(tercerValor => {
+            console.log('El tercer valor es: ', tercerValor);
+        }).catch(error => {
+            console.log(error);
+        });
+
+        /////////////////////////////////////////
+
+const promesa1 = new Promise((resolve, reject) => {
+            setTimeout(resolve, 3000, 'Primer valor')
+        });
+
+        const promesa2 = new Promise((resolve, reject) => {
+            setTimeout(resolve, 300, 'Primer valor')
+        });
+
+        const promesa3 = new Promise((resolve, reject) => {
+            setTimeout(resolve, 1000, 'Primer valor')
+        });
+
+        const listPromesas = [promesa1, promesa2, promesa3];
+
+        Promise.all(listPromesas).then(valores => {
+            console.log(valores);
+        }, error => {
+            console.log(error);
+        });
+
+        ///////////////////////////////////////////////////////////
+
+        const promesa1 = new Promise((resolve, reject) => {
+            setTimeout(resolve, 3000, 'Primer valor')
+        });
+
+        const promesa2 = new Promise((resolve, reject) => {
+            setTimeout(resolve, 300, 'Segundo valor')
+        });
+
+        const promesa3 = new Promise((resolve, reject) => {
+            setTimeout(resolve, 1000, 'Tercer valor')
+        });
+
+        const listPromesas = [promesa1, promesa2, promesa3];
+
+        Promise.race(listPromesas).then(valores => { //.race recibe un arreglo como parametro y nos muestra el primero que se termine de ejecutar
+            console.log(valores);
+        }, error => {
+            console.log(error);
+        });
+
+        /////////////////////////////////////////////////////////////
+
+        const promesa = new Promise((resolve, reject) => {
+            setTimeout(resolve, 1500, 5);
+        });
+
+        promesa.then(primerValor => {
+            console.log('El primer valor es: ', primerValor);
+            return primerValor * primerValor;
+        }).then(segundoValor => {
+            throw new Error('Un error sucedio: (|)');
+            console.log('El segundo valor es: ', segundoValor);
+            return segundoValor * segundoValor;
+        }).then(tercerValor => {
+            console.log('El tercer valor es: ', tercerValor);
+        }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            console.log('La cadena de promesas ha terminado');
+        });
+
+        ///////////////////////////////////////////////////////////
+
+         function primerProceso() {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, 5000, 'Primer valor');
+            });
+        };
+
+        function segundoProceso() {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, 100, 'Segundo valor');
+            });
+        };
+
+        function tercerProceso() {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, 800, 'Tercer valor');
+            });
+        };
+
+        async function llamarTodas() {
+            let primerValor = await primerProceso();
+            let segundoValor = await segundoProceso();
+            let tercerValor = await tercerProceso();
+
+            console.log(primerValor, segundoValor, tercerValor);
+        };
+
+        /////////////////////////////////////////////////////////////
+
+        const primerProceso = new Promise((resolve, reject) => {
+            setTimeout(resolve, 500, 2);
+        });
+
+        async function llamarProceso() {
+            let valor = await primerProceso;
+            return valor * 2;
+        }
+
+        async function llamarFuncionAsincrona() {
+            let resultado = await llamarProceso();
+            return resultado * 2;
+        }
+
+        llamarFuncionAsincrona().then(resultadoFinal => {
+            console.log('Al final tenemos un valor de: ', resultadoFinal);
+        });
