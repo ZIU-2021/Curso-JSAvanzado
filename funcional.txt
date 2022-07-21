@@ -1,0 +1,135 @@
+La programacion funcional nos dice que una funcion no tiene que llamar ni modificar valores externos a ella
+
+//No funcional
+        let val1 = 1;
+
+        function sumar() {
+            return val1 + 1;
+        }
+
+        let temp1 = sumar();
+        //Funcional
+
+        let val2 = 10;
+
+        function sumar2(num) {
+            return num + 2;
+        }
+
+        let temp2 = sumar2(val2);
+
+        //////
+
+        let resultado = [1, 2, 3].reduce((preVal, currentVal) => {
+            return preVal + currentVal;
+        });
+
+        console.log(resultado);
+
+        //////////////////////////////////////////////////////////
+
+        function cambiarRecidencia(persona, nuevaCiudad) {
+                    let copia = Object.assign({}, persona, {
+                        ciudad: nuevaCiudad
+                    });
+                    //persona.ciudad = nuevaCiudad;
+                    return copia;
+                }
+
+                const persona = {
+                    nombre: 'Juanpii',
+                    ciudad: 'Mexico',
+                }
+
+                let nuevaPersona = cambiarRecidencia(persona, 'Ecatepec');
+
+                console.log(nuevaPersona)
+                console.log(persona);
+
+        const arr = new Array(1, 2, 3, 4, 5);
+
+        const arr2 = arr.map(valor => valor * 2);
+        console.log(arr2);
+
+        const arr3 = arr.filter(valor => valor >= 3);
+        console.log(arr3);
+
+        console.log(arr);
+
+        ////////////////////////////////////////////////////
+
+        const func = function() {}
+
+        function miFuncion(foo) {
+            foo();
+            return function() {};
+        }
+
+        miFuncion(func);
+
+        Promise.resolve(5).then(val => {
+            console.log(val);
+        });
+
+        document.getElementById('boton').addEventListener('click', function(event) {
+            console.log(event);
+        })
+
+        setTimeout(function() {}, 0);
+
+        function crearSaludo(saludo) {
+            return function(nombre) {
+                console.log(`${saludo} ${nombre}`);
+            }
+        }
+
+        let saludoManna = crearSaludo('Buenos días ');
+        saludoManna('Aldo');
+
+        let saludoTarde = crearSaludo('Saludo tarde ');
+        saludoTarde('Juan');
+        saludoTarde('Alberto');
+
+        //////////////////////////////////////////////////////////
+
+        function estrella(str) {
+            return str + 'ESTRELLA'
+        }
+
+        function feliz(str) {
+            return str + 'FELIZ'
+        }
+
+        function triste(str) {
+            return str + 'TRISTE'
+        }
+
+        function reir(str) {
+            return str + 'JAJAJAJAJ'
+        }
+
+        function exclamar(str) {
+            return str + '!!!!!'
+        }
+
+        console.log(reir(exclamar('Eso fue gracioso')));
+
+        function crearComposicion(f1, f2) {
+            return function(texto) {
+                return f1(f2(texto));
+            }
+        }
+
+        const muyFeliz = crearComposicion(feliz, estrella);
+        let frase = muyFeliz('Hoy es un bien dia');
+
+        const riendo = crearComposicion(reir, exclamar);
+        let frase1 = riendo('Apoco si mi tio');
+
+        const tristee = crearComposicion(triste, estrella);
+        let frase2 = tristee('Eso me puso muy pero muy');
+
+        console.log(frase);
+        console.log(frase1);
+        console.log(frase2);
+
