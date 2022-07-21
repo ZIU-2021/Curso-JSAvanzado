@@ -1,0 +1,157 @@
+LOS PROXYS SIRVEN PARA ACTUALIZAR EN TIEMPO REAL
+
+const target = function(nombre, apellido) {
+            console.log(`Mi nomnbre es ${nombre} ${apellido}`);
+        }
+
+        const handler = {
+            apply: function(target, thisValue, args) {
+                console.log(`Se ha llamado a la funcion ${target.name} con los parametros ${args}`);
+                return target(...args);
+            }
+        }
+
+        const miProxy = new Proxy(target, handler);
+        miProxy('Aldo', 'Ibañez');
+
+         const dateProxied = new Proxy(Date, {
+            construct(target, args) {
+                console.log(`Creamos un objeto Date`);
+                return new target(...args);
+            }
+        });
+
+        let fecha = new dateProxied();
+
+        /////////////////////////////////////////////////
+
+        const target = {
+            titulo: 'titulo',
+            autor: 'autor',
+            genero: 'genero',
+            numeroPaginas: 255
+        }
+
+        const handler = {
+            get: function(target, prop, proxy) {
+                if (prop === 'numeroPaginas') {
+                    return `Tengo ${target[prop]} paginas`;
+                } else {
+                    return target[prop];
+                }
+            },
+            set(target, prop, value) {
+                if (prop == 'titulo' || prop == 'autor') {
+                    console.log(`No puedes modificar la propiedad ${prop}`);
+                } else {
+                    target[prop] = value;
+                }
+            },
+            deleteProperty(target, prop) {
+                throw Error(`No esta permitido eliminar propiedades de este objeto`)
+                return;
+            }
+        }
+
+        const miProxy = new Proxy(target, handler);
+
+        console.log(miProxy.titulo);
+        console.log(miProxy.numeroPaginas);
+
+        miProxy.titulo = 'Titulo nuevo';
+        miProxy.numeroPaginas = 666;
+        console.log(miProxy.numeroPaginas);
+        console.log(miProxy.titulo);
+
+        delete miProxy.genero;
+        console.log(miProxy.genero);
+
+        ///////////////////////////////////////////////////
+
+        const target = {
+            titulo: 'titulo',
+            autor: 'autor',
+            genero: 'genero',
+            numeroPaginas: 255
+        }
+
+        const handler = {
+            get: function(target, prop, proxy) {
+                if (prop === 'numeroPaginas') {
+                    return `Tengo ${target[prop]} paginas`;
+                } else {
+                    return target[prop];
+                }
+            },
+            set(target, prop, value) {
+                if (prop == 'titulo' || prop == 'autor') {
+                    console.log(`No puedes modificar la propiedad ${prop}`);
+                } else {
+                    target[prop] = value;
+                }
+            }
+        }
+
+        const {
+            proxy: miProxy,
+            revoke
+        } = Proxy.revocable(target, handler);
+
+        console.log(miProxy.titulo);
+        console.log(miProxy.numeroPaginas);
+
+        revoke();
+
+        miProxy.titulo = 'Un titulo nuevo';
+
+        ///////////////////////////////////////////////////
+
+        const target = {
+            render(val, tag) {
+                let htmlTag = document.getElementsByTagName(tag)[0];
+
+                if (!htmlTag) {
+                    htmlTag = document.createElement(tag);
+                    document.body.appendChild(htmlTag);
+                }
+                htmlTag.textContent = val;
+            }
+        };
+
+        const handler = {
+            set(target, prop, value) {
+                target[prop] = value;
+                target.render(value, prop == 'titulo' ? 'h1' : 'p');
+            }
+        }
+
+        const miProxy = new Proxy(target, handler);
+
+        //////////////////////////////////////////
+
+        let fecha = new Date();
+
+        const miProxyFecha = new Proxy(fecha, {
+            get: function(target, prop, proxy) {
+                if (prop == 'format') {
+                    return `${target.getDate()}/${target.getMonth()}/${target.getFullYear()}`
+                } else {
+                    return target[prop];
+                }
+            }
+        });
+
+        //////////////////////////////////////////////
+
+        const proxyDatos = new Proxy({}, {
+            set(target, prop, value) {
+                if (prop == 'edad' && !Number.isInteger(value)) {
+                    throw new Error('El valor para edad no es valido');
+                }
+                if (prop == 'fecha' && !/^(0?[1-9]|1[0-2])[\/](0?[1-9]|[12]\d|3[01])[\/](19|20)\d{2}$/.test(value)) {
+                    throw new Error('El formato de fecha no es valido');
+                }
+
+                return target[prop] = value;
+            }
+        });
