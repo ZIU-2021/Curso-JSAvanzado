@@ -1,0 +1,139 @@
+USO DE COOKIES
+
+function listarCookies() {
+            return document.cookie.split('; ').map(cookie => cookie.split('='));
+        }
+
+        function buscarCookie(key) {
+            return listarCookies().filter(par => par[0] == key);
+        }
+
+        ////////////////////////////////////////////////////
+
+       //Guardar datos
+        localStorage.setItem('nombre', 'Aldo Ibañez');
+        sessionStorage.setItem('ciudad', 'Mexico');
+
+        //Recuperar datos
+        let nombre = localStorage.getItem('nombre');
+        let ciudad = sessionStorage.getItem('ciudad');
+
+        console.log(`${nombre} vive en ${ciudad}`);
+
+        //Eliminar datos
+        localStorage.removeItem('nombre');
+        sessionStorage.removeItem('ciudad');
+
+        localStorage.clear();
+        sessionStorage.clear();
+
+        nombre = localStorage.getItem('nombre');
+        console.log(`Ahora nombre es ${nombre}`);
+
+        //////////////////////////////////////////////////
+
+        function mostrarPais(latitude, longitude) {
+            var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&sensor=true&key=';
+
+            fetch(url, {
+                headers: this.getHeaders()
+            }).then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response;
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                var address = data.results[0];
+                let el = address.formatted_address.split(', ');
+                let node = document.createElement('h1');
+                node.textContent = 'Tu estas en: ' + el[el.length - 1];
+                document.body.appendChild(node);
+            }).catch(error => {
+                console.log('Reques fallo', error)
+            });
+        };
+
+        var mostrarPais = function(position) {
+            var x = position.coords.latitude; //Arroja un error aqui, pero no se porque
+            var y = position.coords.longitude;
+            console.log(x, y);
+            mostrarPais(x, y);
+        };
+
+        var errorCallBack = function(error) {
+            throw new Error('No es posible accdeder a las coordenadas del usuario');
+        };
+
+        navigator.geolocation.getCurrentPosition(mostrarPais, errorCallBack); 
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso JS Avanzado</title>
+    <style type="text/css">
+        #contenedor-padre {
+            width: 500px;
+            height: 500px;
+            background-color: #7CB342;
+        }
+        
+        #contenedor-hijo1 {
+            width: 300px;
+            height: 300px;
+            background-color: #FFB300;
+        }
+        
+        #contenedor-hijo2 {
+            width: 100px;
+            height: 100px;
+            background-color: #6D4C41;
+        }
+        
+        span {
+            color: #FFFFFF;
+            font-weight: bold;
+            padding: 5px;
+            font-family: Arial;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="contenedor-padre">
+        <span>Padre</span>
+        <div id="contenedor-hijo1">
+            <span>Hijo #1</span>
+            <div id="contenedor-hijo2">
+                <span>Hijo #2</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        document.getElementById('contenedor-padre').addEventListener('click', function(event) {
+            console.log('Click en padre con el target:', event.target);
+        });
+
+        document.getElementById('contenedor-hijo1').addEventListener('click', function(event) {
+            console.log('Click en hijo #1');
+            console.log('Yo soy: ', event.currentTarget)
+        });
+
+        document.getElementById('contenedor-hijo2').addEventListener('click', function(event) {
+            event.stopPropagation(); //detiene bubbling al contenedor padre
+            event.stopImmediatePropagation(); //detiene bubbling a cualquier otro listener
+            console.log('Click en hijo #2');
+        });
+
+        document.getElementById('contenedor-hijo2').addEventListener('click', function(event) {
+            console.log('Click en hijo 2, segunda vez');
+        });
+    </script>
+</body>
+
+</html>

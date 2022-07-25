@@ -1,0 +1,148 @@
+class RequestHandler {
+            constructor() {
+                this.url = ' https://swapi.dev/api/people/';
+                this.color = 'color: purple;';
+                this.green = 'background:green; color: white; display: block;';
+                this.red = 'background:green; color: white; display: block;';
+            }
+
+            getHeaders() {
+                return {
+                    'Content-type': 'aplication/json'
+                }
+            }
+            hacerRequest(request, params, tipoRquest) {
+                return new Promise((resolve, reject) => {
+                    console.log('%c enviando request con los parametros=>', this.color, params);
+                    fetch(this.url + (request || ''), {
+                            headers: this.getHeaders(),
+                            method: tipoRquest,
+                            body: tipoRquest !== 'GET' ? JSON.stringif(params) : null
+                        })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw Error(response.statusText);
+                            }
+                            return response;
+                        }).then(response => {
+                            return response.json();
+                        }).then(data => {
+                            console.log('Datos recibidos=>', this.green, params);
+                            resolve(data);
+                        }).catch(error => {
+                            console.log('%c Request fallo', this.red, error);
+                        });
+
+                });
+
+            }
+        }
+
+        const requestHandler = new RequestHandler();
+
+        requestHandler.hacerRequest(null, {}, 'GET').then(datos => {
+            console.log('datos');
+        });
+
+        ////////////////////////////////////////////////////////////////
+
+    class RequestHandler {
+            constructor() {
+                this.url = ' https://swapi.dev/api/people/';
+                this.color = 'color: purple;';
+                this.green = 'background:green; color: white; display: block;';
+                this.red = 'background:red; color: white; display: block;';
+            }
+
+            getHeaders() {
+                return {
+                    'Content-type': 'aplication/json'
+                }
+            }
+            hacerRequest(request, params, tipoRquest) {
+                return new Promise((resolve, reject) => {
+                    console.log('%c enviando request con los parametros=>', this.color, params);
+                    fetch(this.url + (request || ''), {
+                            headers: this.getHeaders(),
+                            method: tipoRquest,
+                            body: tipoRquest !== 'GET' ? JSON.stringify(params) : null
+                        })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw Error(response.statusText);
+                            }
+                            return response;
+                        }).then(response => {
+                            return response.json();
+                        }).then(data => {
+                            console.log('Datos recibidos=>', this.green, params);
+                            resolve(data);
+                        }).catch(error => {
+                            console.log('%c Request fallo', this.red, error);
+                        });
+
+                });
+
+            }
+        }
+
+        const requestHandler = new RequestHandler();
+
+        requestHandler.hacerRequest(null, {
+            libro: {
+                id: '1'
+            }
+        }, 'PUT').then(datos => {
+            console.log('datos');
+        });
+
+        ////////////////////////////////////////////////////////////////
+         class RequestHandler {
+            constructor() {
+                this.url = ' https://swapi.dev/api/people/';
+                this.color = 'color: purple;';
+                this.green = 'background:green; color: white; display: block;';
+                this.red = 'background:red; color: white; display: block;';
+            }
+
+            getHeaders() {
+                return {
+                    'Content-type': 'aplication/json'
+                }
+            }
+            hacerRequest(request, params, tipoRquest) {
+                return new Promise((resolve, reject) => {
+                    console.log('%c enviando request con los parametros=>', this.color, params);
+                    fetch(this.url + (request || ''), {
+                            headers: this.getHeaders(),
+                            method: tipoRquest,
+                            body: tipoRquest !== 'GET' ? JSON.stringify(params) : null
+                        })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw Error(response.statusText);
+                            }
+                            return response;
+                        }).then(response => {
+                            return response.json();
+                        }).then(data => {
+                            console.log('Datos recibidos=>', this.green, params);
+                            resolve(data);
+                        }).catch(error => {
+                            console.log('%c Request fallo', this.red, error);
+                        });
+
+                });
+
+            }
+        }
+
+        const requestHandler = new RequestHandler();
+
+        requestHandler.hacerRequest(null, {
+            libro: {
+                id: '1'
+            }
+        }, 'DELETE').then(datos => {
+            console.log('datos');
+        });
